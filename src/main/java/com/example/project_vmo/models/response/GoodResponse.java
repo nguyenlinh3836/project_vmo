@@ -1,5 +1,6 @@
 package com.example.project_vmo.models.response;
 
+import com.example.project_vmo.models.entities.Image;
 import com.example.project_vmo.models.request.GoodDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,5 +19,6 @@ public class GoodResponse {
   private long totalElements;
   private int totalPages;
   private boolean last;
+  private List<Image> images;
 
 }

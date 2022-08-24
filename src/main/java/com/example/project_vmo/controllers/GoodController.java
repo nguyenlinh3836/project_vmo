@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +30,6 @@ public class GoodController {
   private GoodService goodService;
   @Autowired
   private ImageService imageService;
-  @Autowired
-  private ModelMapper mapper;
 
   @GetMapping
   public GoodResponse listGoods(
@@ -47,8 +46,9 @@ public class GoodController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateGood(@RequestParam GoodDto goodDto, @PathVariable int id) {
-    return ResponseEntity.status(HttpStatus.ACCEPTED).body(goodService.updateGood(goodDto, id));
+  public ResponseEntity<?> updateGood(@RequestPart GoodDto goodDto, @PathVariable int id,@RequestPart MultipartFile[] files)
+      throws IOException {
+    return ResponseEntity.status(HttpStatus.ACCEPTED).body(goodService.updateGood(goodDto, id,files));
   }
 
   @DeleteMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.example.project_vmo.models.request;
 
+import com.sun.istack.NotNull;
 import java.util.List;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,9 @@ public class GoodDto {
 
   @Id
   private int goodsId;
+  @NotNull
   private String goodsName;
+  @NotNull
   private int quantity;
 //  private List<ImageDto> images;
 //  private Date create_at;

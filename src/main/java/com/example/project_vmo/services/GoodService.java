@@ -14,7 +14,7 @@ public interface GoodService {
 
   GoodDto createGood(GoodDto good,MultipartFile[] files) throws IOException;
 
-  GoodDto updateGood(GoodDto good, int id);
+  GoodDto updateGood(GoodDto good, int id,MultipartFile[] files) throws IOException;
 
   void deleteGood(int id);
 

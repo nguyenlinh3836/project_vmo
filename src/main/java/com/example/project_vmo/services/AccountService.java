@@ -1,10 +1,10 @@
 package com.example.project_vmo.services;
 
-import com.example.project_vmo.models.entities.Role;
 import com.example.project_vmo.models.request.AccountDto;
+import com.example.project_vmo.models.response.RoleListResponse;
 import java.util.List;
-import java.util.Set;
 import javax.security.auth.login.AccountNotFoundException;
+import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
 
@@ -16,7 +16,7 @@ public interface AccountService {
 
   AccountDto deleteAccount(int id);
 
-  List<AccountDto> getAccountByRole(String name);
+  RoleListResponse getAccountByRole(String name, int pageNo,int pageSize);
 
   void updateResetPasswordToken(String token, String email) throws AccountNotFoundException;
 

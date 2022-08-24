@@ -77,8 +77,21 @@ public class GoodServiceImpl implements GoodService {
 
   @Override
   @Transactional
-  public GoodDto updateGood(GoodDto goodDto, int id) {
-    Good good = MapperUtil.map(goodDto,Good.class);
+  public GoodDto updateGood(GoodDto goodDto, int id,MultipartFile[] files) throws IOException {
+    Good good = MapperUtil.map(goodDto, Good.class);
+    List<Image> image = new ArrayList<>();
+    for (MultipartFile item : files) {
+      {
+        Image itemImage = new Image();
+        String imageUUID = item.getOriginalFilename();
+        Path filenamePath = Paths.get(uploadDir, imageUUID);
+        Files.write(filenamePath, item.getBytes());
+        itemImage.setGoods(good);
+        itemImage.setName(imageUUID);
+        image.add(itemImage);
+      }
+    }
+    imageRepo.saveAll(image);
     good.setGoodsId(id);
     return MapperUtil.map(goodRepo.save(good), GoodDto.class);
   }

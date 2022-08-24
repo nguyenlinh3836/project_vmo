@@ -1,16 +1,10 @@
 package com.example.project_vmo.security.jwt;
 
+
 import com.example.project_vmo.models.entities.Account;
-import com.example.project_vmo.models.entities.Role;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 @Data
 public class CustomUserDetail implements UserDetails {

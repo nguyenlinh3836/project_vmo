@@ -59,17 +59,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.cors().and().csrf().disable()
+    http.csrf().disable()
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests()
         .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v2/**").permitAll()
         .antMatchers("/api/role").permitAll()
-        .antMatchers("/api/user/**").hasRole("ADMIN")
+        .antMatchers("/api/user","/api/admin").permitAll()
+        .antMatchers("/api/goods").hasAnyAuthority("ADMIN","SUPPLIER")
         .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
   }
+
 
 }

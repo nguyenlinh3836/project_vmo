@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,26 +44,28 @@ public class Account {
 
   @Column
   @CreationTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
   private Date create_at;
 
   @Column
   @UpdateTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
   private Date updated_at;
 
   @Column
-  private Boolean is_deleted;
+  private Boolean is_deleted = false;
   private boolean enabled;
 
   @Column(name = "resetPasswordToken")
   private String resetPasswordToken;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinTable(
       name = "users_roles",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id")
   )
-  private Set<Role> roles = new HashSet<>();
+  private List<Role> roles = new ArrayList<>();
 
 
 }
