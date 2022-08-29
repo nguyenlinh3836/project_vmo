@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -66,6 +67,7 @@ public class Account {
       inverseJoinColumns = @JoinColumn(name = "role_id")
   )
   private List<Role> roles = new ArrayList<>();
+
 
 
 }

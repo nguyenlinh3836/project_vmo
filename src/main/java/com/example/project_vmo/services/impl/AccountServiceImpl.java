@@ -1,13 +1,14 @@
-package com.example.project_vmo.services;
+package com.example.project_vmo.services.impl;
 
 import com.example.project_vmo.commons.config.MapperUtil;
 import com.example.project_vmo.models.entities.Account;
 import com.example.project_vmo.models.entities.Role;
 import com.example.project_vmo.models.request.AccountDto;
+import com.example.project_vmo.models.request.UpdateAccountDto;
 import com.example.project_vmo.models.response.RoleListResponse;
 import com.example.project_vmo.repositories.AccountRepo;
+import com.example.project_vmo.services.AccountService;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.transaction.Transactional;
@@ -53,10 +54,10 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public AccountDto deleteAccount(int id) {
+  public void deleteAccount(int id) {
     Account account = MapperUtil.map(accountRepo.findByAccountId(id), Account.class);
     account.setIs_deleted(true);
-    return MapperUtil.map(account, AccountDto.class);
+    MapperUtil.map(account, AccountDto.class);
   }
 
   @Override
@@ -97,5 +98,12 @@ public class AccountServiceImpl implements AccountService {
     account.setPassword(passwordEncoder.encode(newPassword));
     account.setResetPasswordToken(null);
     accountRepo.save(account);
+  }
+
+  @Override
+  public UpdateAccountDto updateAccount(UpdateAccountDto accountDto, int id) {
+    Account account = MapperUtil.map(accountDto, Account.class);
+    account.setAccountId(id);
+    return MapperUtil.map(accountRepo.save(account), UpdateAccountDto.class);
   }
 }

@@ -5,11 +5,9 @@ import com.example.project_vmo.models.response.GoodResponse;
 import com.example.project_vmo.services.GoodService;
 import com.example.project_vmo.services.ImageService;
 import java.io.IOException;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,22 +31,25 @@ public class GoodController {
 
   @GetMapping
   public GoodResponse listGoods(
-      @RequestParam(value = "pageNo",defaultValue = "0") int pageNo,
-      @RequestParam(value = "pageSize",defaultValue = "5") int pageSize
+      @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
+      @RequestParam(value = "pageSize", defaultValue = "5") int pageSize
   ) {
     return goodService.getAllGoods(pageNo, pageSize);
   }
 
   @PostMapping()
-  public ResponseEntity<?> createGood(@RequestPart(value = "good") GoodDto goodDto,
-      @RequestPart(value = "files", required = false) MultipartFile[] files) throws IOException {
+  public ResponseEntity<?> createGood(@RequestPart(value = "good") @Validated GoodDto goodDto,
+      @RequestPart(value = "files", required = false) @Validated MultipartFile[] files)
+      throws IOException {
     return ResponseEntity.status(HttpStatus.ACCEPTED).body(goodService.createGood(goodDto, files));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateGood(@RequestPart GoodDto goodDto, @PathVariable int id,@RequestPart MultipartFile[] files)
+  public ResponseEntity<?> updateGood(@RequestPart(value = "good") GoodDto goodDto, @PathVariable int id,
+      @RequestPart @Validated MultipartFile[] files)
       throws IOException {
-    return ResponseEntity.status(HttpStatus.ACCEPTED).body(goodService.updateGood(goodDto, id,files));
+    return ResponseEntity.status(HttpStatus.ACCEPTED)
+        .body(goodService.updateGood(goodDto, id, files));
   }
 
   @DeleteMapping("/{id}")

@@ -1,4 +1,4 @@
-package com.example.project_vmo.services;
+package com.example.project_vmo.services.impl;
 import com.example.project_vmo.commons.config.MapperUtil;
 import com.example.project_vmo.models.entities.Good;
 import com.example.project_vmo.models.entities.Image;
@@ -6,6 +6,7 @@ import com.example.project_vmo.models.request.GoodDto;
 import com.example.project_vmo.models.response.GoodResponse;
 import com.example.project_vmo.repositories.GoodRepo;
 import com.example.project_vmo.repositories.ImageRepo;
+import com.example.project_vmo.services.GoodService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -72,13 +73,15 @@ public class GoodServiceImpl implements GoodService {
       }
     }
     imageRepo.saveAll(image);
+    good.setImages(image);
     return MapperUtil.map(goodRepo.save(good), GoodDto.class);
   }
 
   @Override
   @Transactional
   public GoodDto updateGood(GoodDto goodDto, int id,MultipartFile[] files) throws IOException {
-    Good good = MapperUtil.map(goodDto, Good.class);
+    Good good = MapperUtil.map(goodRepo.findByGoodsId(id), Good.class);
+    imageRepo.deleteAll(good.getImages());
     List<Image> image = new ArrayList<>();
     for (MultipartFile item : files) {
       {
@@ -92,7 +95,7 @@ public class GoodServiceImpl implements GoodService {
       }
     }
     imageRepo.saveAll(image);
-    good.setGoodsId(id);
+    good.setImages(image);
     return MapperUtil.map(goodRepo.save(good), GoodDto.class);
   }
 

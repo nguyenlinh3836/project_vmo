@@ -1,8 +1,9 @@
-package com.example.project_vmo.services;
+package com.example.project_vmo.services.impl;
 
 
 import com.example.project_vmo.models.entities.Image;
 import com.example.project_vmo.repositories.ImageRepo;
+import com.example.project_vmo.services.ImageService;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,14 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public List<Image> upDateImage(List<Image> images) {
+  public List<Image> updateImage(List<Image> images) {
     return imageRepo.saveAll(images);
   }
+
+  @Override
+  public void deleteImageAll(List<Image> images) {
+    imageRepo.deleteAll(images);
+  }
+
+
 }

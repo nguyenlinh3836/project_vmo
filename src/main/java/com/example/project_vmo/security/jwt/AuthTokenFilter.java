@@ -1,6 +1,6 @@
 package com.example.project_vmo.security.jwt;
 
-import com.example.project_vmo.services.UserDetailsServiceImpl;
+import com.example.project_vmo.services.impl.UserDetailsServiceImpl;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

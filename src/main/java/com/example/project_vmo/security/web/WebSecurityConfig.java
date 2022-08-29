@@ -2,7 +2,7 @@ package com.example.project_vmo.security.web;
 
 import com.example.project_vmo.security.jwt.AuthEntryPointJwt;
 import com.example.project_vmo.security.jwt.AuthTokenFilter;
-import com.example.project_vmo.services.UserDetailsServiceImpl;
+import com.example.project_vmo.services.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/api/role").permitAll()
         .antMatchers("/api/user","/api/admin").permitAll()
         .antMatchers("/api/goods").hasAnyAuthority("ADMIN","SUPPLIER")
+        .antMatchers("/api/**").permitAll()
         .anyRequest().authenticated();
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

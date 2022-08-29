@@ -21,7 +21,7 @@ public class GoodDto {
   private String goodsName;
   @NotNull
   private int quantity;
-//  private List<ImageDto> images;
+  private List<ImageDto> images;
 //  private Date create_at;
 //  private Date updated_at;
 //  private Boolean is_deleted = Boolean.FALSE;
