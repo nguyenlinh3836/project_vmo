@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "account")
 @Getter
@@ -44,6 +45,15 @@ public class Account {
   private String password;
 
   @Column
+  private String fullName;
+
+  @Column
+  private String address;
+
+  @Column
+  private int age;
+
+  @Column
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   private Date create_at;
@@ -57,8 +67,6 @@ public class Account {
   private Boolean is_deleted = false;
   private boolean enabled;
 
-  @Column(name = "resetPasswordToken")
-  private String resetPasswordToken;
 
   @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinTable(
@@ -68,6 +76,7 @@ public class Account {
   )
   private List<Role> roles = new ArrayList<>();
 
-
+  @OneToOne(mappedBy = "account", orphanRemoval = true)
+  private UserStatic userStatic;
 
 }

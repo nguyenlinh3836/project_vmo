@@ -15,20 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class ForgotPasswordController {
-@Autowired
-private PasswordTokenService passwordTokenService;
-  @GetMapping( "/forgot-password/confirm")
+
+  @Autowired
+  private PasswordTokenService passwordTokenService;
+
+  @GetMapping("/forgot-password/confirm")
   public String confirmTokenToChangePassword(@RequestParam("token") String token) {
     return passwordTokenService.confirmTokenResetPassword(token);
   }
 
   @PostMapping("/forgot-password")
-  public ResponseEntity<?> sendTokenToChangePassword(@RequestBody PasswordResetLinkRequest request) {
+  public ResponseEntity<?> sendTokenToChangePassword(
+      @RequestBody PasswordResetLinkRequest request) {
     return ResponseEntity.ok(passwordTokenService.sendTokenToChangePassword(request));
   }
 
   @PostMapping("/reset-password")
-  public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest request){
+  public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest request) {
     return ResponseEntity.ok(passwordTokenService.changePassword(request));
   }
 

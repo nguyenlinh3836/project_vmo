@@ -15,15 +15,15 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
 
   Optional<Account> findByUsernameOrEmail(String name, String email);
 
-  Account getAccountByUsername(String name);
+  Account findByUsername(String name);
 
   Account findByEmail(String email);
-
-  Account findByResetPasswordToken(String token);
 
   Account findByAccountId(int id);
 
 
   Page<Account> findByRoles_roleName(String roleName, Pageable pageable);
+
+
 
 }

@@ -1,16 +1,12 @@
 package com.example.project_vmo.models.request;
 
 import java.util.Date;
-import java.util.List;
-import javax.persistence.Id;
 import lombok.Data;
 
 @Data
 public class UpdateAccountDto {
-  @Id
-  private int accountId;
-  private String username;
+  private String fullName;
   private String email;
-  private Date create_at;
+  private String address;
   private Date updated_at;
 }

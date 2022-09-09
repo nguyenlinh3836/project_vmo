@@ -5,12 +5,12 @@ import com.example.project_vmo.models.entities.Account;
 import com.example.project_vmo.models.entities.Role;
 import com.example.project_vmo.models.request.AccountDto;
 import com.example.project_vmo.models.request.UpdateAccountDto;
+import com.example.project_vmo.models.request.UpdatePasswordRequest;
 import com.example.project_vmo.models.response.RoleListResponse;
 import com.example.project_vmo.repositories.AccountRepo;
 import com.example.project_vmo.services.AccountService;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.security.auth.login.AccountNotFoundException;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,18 +40,18 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public AccountDto createAccount(AccountDto accountDto) {
     Account account = MapperUtil.map(accountDto, Account.class);
+    if (emailExists(account.getEmail())){
+      throw new IllegalStateException("Email already exists !");
+    }
+    if (usernameExists(account.getUsername())){
+      throw new IllegalStateException("Username already exists !");
+    }
     List<Role> roles = MapperUtil.mapList(accountDto.getRoles(),Role.class);
     account.setRoles(roles);
     account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
     return MapperUtil.map(accountRepo.save(account), AccountDto.class);
   }
 
-  @Override
-  public AccountDto updateAccount(int id, AccountDto accountDto) {
-    Account account = MapperUtil.map(accountDto, Account.class);
-    account.setAccountId(id);
-    return MapperUtil.map(accountRepo.save(account), AccountDto.class);
-  }
 
   @Override
   public void deleteAccount(int id) {
@@ -77,26 +77,9 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public void updateResetPasswordToken(String token, String email) throws AccountNotFoundException {
-    Account account = accountRepo.findByEmail(email);
-    if(account != null){
-      account.setResetPasswordToken(token);
-      accountRepo.save(account);
-    } else {
-      throw new AccountNotFoundException("Could not find any account with the email " + email);
-    }
-  }
-
-  @Override
-  public AccountDto getByResetPasswordToken(String token) {
-    return MapperUtil.map(accountRepo.findByResetPasswordToken(token), AccountDto.class);
-  }
-
-  @Override
-  public void updatePassword(AccountDto accountDto, String newPassword) {
-    Account account = MapperUtil.map(accountDto, Account.class);
-    account.setPassword(passwordEncoder.encode(newPassword));
-    account.setResetPasswordToken(null);
+  public void updatePassword(UpdatePasswordRequest passwordRequest, int id) {
+    Account account = MapperUtil.map(passwordRequest, Account.class);
+    account.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
     accountRepo.save(account);
   }
 
@@ -106,4 +89,13 @@ public class AccountServiceImpl implements AccountService {
     account.setAccountId(id);
     return MapperUtil.map(accountRepo.save(account), UpdateAccountDto.class);
   }
+
+  private boolean emailExists(String email) {
+    return accountRepo.findByEmail(email) != null;
+  }
+
+  private boolean usernameExists(String username) {
+    return accountRepo.findByUsername(username) != null;
+  }
+
 }

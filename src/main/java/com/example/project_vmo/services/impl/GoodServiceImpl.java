@@ -7,10 +7,12 @@ import com.example.project_vmo.models.response.GoodResponse;
 import com.example.project_vmo.repositories.GoodRepo;
 import com.example.project_vmo.repositories.ImageRepo;
 import com.example.project_vmo.services.GoodService;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
+@Transactional
 public class GoodServiceImpl implements GoodService {
 
   @Autowired
@@ -57,19 +60,32 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
+  public GoodDto getGoodById(int id) {
+    return MapperUtil.map(goodRepo.findByGoodsId(id), GoodDto.class);
+  }
+
+  @Override
   @Transactional
-  public GoodDto createGood(GoodDto goodDto,MultipartFile[] files) throws IOException {
+  public GoodDto createGood(GoodDto goodDto,MultipartFile[] files)  {
     Good good = MapperUtil.map(goodDto, Good.class);
     List<Image> image = new ArrayList<>();
     for (MultipartFile item : files) {
-      {
-        Image itemImage = new Image();
-        String imageUUID = item.getOriginalFilename();
-        Path filenamePath = Paths.get(uploadDir, imageUUID);
-        Files.write(filenamePath, item.getBytes());
-        itemImage.setGoods(good);
-        itemImage.setName(imageUUID);
-        image.add(itemImage);
+      try {
+        {
+          String name = item.getOriginalFilename();
+          Image itemImage = new Image();
+          String randomID = UUID.randomUUID().toString();
+          assert name != null;
+          String filename1 = randomID.concat(name.substring(name.lastIndexOf(".")));
+          String filePath = uploadDir + File.separator + filename1;
+          File f = new File(uploadDir);
+          Files.copy(item.getInputStream(), Paths.get(filePath));
+          itemImage.setGoods(good);
+          itemImage.setName(name);
+          image.add(itemImage);
+        }
+      }catch (IOException e){
+        e.printStackTrace();
       }
     }
     imageRepo.saveAll(image);
@@ -81,22 +97,8 @@ public class GoodServiceImpl implements GoodService {
   @Transactional
   public GoodDto updateGood(GoodDto goodDto, int id,MultipartFile[] files) throws IOException {
     Good good = MapperUtil.map(goodRepo.findByGoodsId(id), Good.class);
-    imageRepo.deleteAll(good.getImages());
-    List<Image> image = new ArrayList<>();
-    for (MultipartFile item : files) {
-      {
-        Image itemImage = new Image();
-        String imageUUID = item.getOriginalFilename();
-        Path filenamePath = Paths.get(uploadDir, imageUUID);
-        Files.write(filenamePath, item.getBytes());
-        itemImage.setGoods(good);
-        itemImage.setName(imageUUID);
-        image.add(itemImage);
-      }
-    }
-    imageRepo.saveAll(image);
-    good.setImages(image);
-    return MapperUtil.map(goodRepo.save(good), GoodDto.class);
+    imageRepo.deleteImagesByGoods(good.getGoodsId());
+    return createGood(goodDto,files);
   }
 
   @Override

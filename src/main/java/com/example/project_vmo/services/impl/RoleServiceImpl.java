@@ -5,10 +5,12 @@ import com.example.project_vmo.models.entities.Role;
 import com.example.project_vmo.models.request.RoleDto;
 import com.example.project_vmo.repositories.RoleRepo;
 import com.example.project_vmo.services.RoleService;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 @Autowired
 private RoleRepo roleRepo;

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/goods")
+@RequestMapping("/api/good")
 public class GoodController {
 
   @Autowired
@@ -45,7 +45,7 @@ public class GoodController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateGood(@RequestPart(value = "good") GoodDto goodDto, @PathVariable int id,
+  public ResponseEntity<?> updateGood(@RequestPart(value = "good") @Validated GoodDto goodDto, @PathVariable int id,
       @RequestPart @Validated MultipartFile[] files)
       throws IOException {
     return ResponseEntity.status(HttpStatus.ACCEPTED)
@@ -56,6 +56,11 @@ public class GoodController {
   public ResponseEntity<?> deleteGood(@PathVariable int id) {
     goodService.deleteGood(id);
     return ResponseEntity.status(HttpStatus.ACCEPTED).body("Good has been deleted");
+  }
+
+  @GetMapping("/{goodId}")
+  public ResponseEntity<?> getGoodById(@PathVariable("goodId") int goodId){
+    return ResponseEntity.status(HttpStatus.ACCEPTED).body(goodService.getGoodById(goodId));
   }
 
 

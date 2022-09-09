@@ -11,12 +11,14 @@ import com.example.project_vmo.services.EmailSender;
 import com.example.project_vmo.services.PasswordTokenService;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class PasswordTokenServiceImpl implements PasswordTokenService {
   @Autowired
   private PasswordResetTokenRepo passwordResetTokenRepo;

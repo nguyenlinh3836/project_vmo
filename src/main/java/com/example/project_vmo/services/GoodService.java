@@ -12,6 +12,8 @@ public interface GoodService {
 
   GoodDto findByGoodName(String name);
 
+  GoodDto getGoodById(int id);
+
   GoodDto createGood(GoodDto good,MultipartFile[] files) throws IOException;
 
   GoodDto updateGood(GoodDto good, int id,MultipartFile[] files) throws IOException;
