@@ -19,6 +19,10 @@ public class CustomUserDetail implements UserDetails {
     return authorities;
   }
 
+  public String getEmail() {
+    return account.getEmail();
+  }
+
   @Override
   public String getPassword() {
     return account.getPassword();
@@ -46,7 +50,7 @@ public class CustomUserDetail implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return account.isEnabled();
+    return false;
   }
 
 

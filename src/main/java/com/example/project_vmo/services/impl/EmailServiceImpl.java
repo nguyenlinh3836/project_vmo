@@ -62,7 +62,7 @@ public class EmailServiceImpl implements EmailSender {
   @Override
   public PasswordResetToken getValidToken(PasswordResetRequest request) {
     String tokenName = request.getToken();
-    PasswordResetToken token =passwordResetTokenRepo.findByToken(tokenName);
+    PasswordResetToken token = passwordResetTokenRepo.findByToken(tokenName).get();
     matchEmail(token, request.getEmail());
     verifyExpiration(token);
     return token;

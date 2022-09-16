@@ -2,9 +2,7 @@ package com.example.project_vmo.models.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -54,6 +53,9 @@ public class Account {
   private int age;
 
   @Column
+  private String phone;
+
+  @Column
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   private Date create_at;
@@ -65,8 +67,6 @@ public class Account {
 
   @Column
   private Boolean is_deleted = false;
-  private boolean enabled;
-
 
   @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
   @JoinTable(
@@ -77,6 +77,9 @@ public class Account {
   private List<Role> roles = new ArrayList<>();
 
   @OneToOne(mappedBy = "account", orphanRemoval = true)
-  private UserStatic userStatic;
+  private UserStatist userStatist;
+
+  @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
+  private List<Good> goods;
 
 }

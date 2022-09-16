@@ -1,6 +1,7 @@
 package com.example.project_vmo.services.impl;
 
 import com.example.project_vmo.commons.config.MapperUtil;
+import com.example.project_vmo.commons.filters.PhoneValidator;
 import com.example.project_vmo.models.entities.Account;
 import com.example.project_vmo.models.entities.Role;
 import com.example.project_vmo.models.request.AccountDto;
@@ -12,10 +13,12 @@ import com.example.project_vmo.services.AccountService;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,9 @@ public class AccountServiceImpl implements AccountService {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private PhoneValidator phoneValidator;
 
   @Override
   public List<AccountDto> getAll() {
@@ -84,14 +90,32 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public UpdateAccountDto updateAccount(UpdateAccountDto accountDto, int id) {
+  public AccountDto adminUpdateDto(AccountDto accountDto, int id) {
     Account account = MapperUtil.map(accountDto, Account.class);
     account.setAccountId(id);
-    return MapperUtil.map(accountRepo.save(account), UpdateAccountDto.class);
+    return MapperUtil.map(accountRepo.save(account), AccountDto.class);
+  }
+
+  @Override
+  public UpdateAccountDto updateAccount(UpdateAccountDto accountDto, User user) {
+    Account account = accountRepo.findByUsername(user.getUsername());
+    account.setFullName(accountDto.getFullName());
+    account.setAddress(accountDto.getAddress());
+    account.setAge(accountDto.getAge());
+    if (!StringUtils.isEmpty(accountDto.getPhone())) {
+      boolean isValidPhone = phoneValidator.test(accountDto.getPhone());
+      if (!isValidPhone) {
+        throw new IllegalStateException("Phone number is not valid");
+      } else {
+        account.setPhone(accountDto.getPhone());
+      }
+    }
+    accountRepo.save(account);
+    return MapperUtil.map(account, UpdateAccountDto.class);
   }
 
   private boolean emailExists(String email) {
-    return accountRepo.findByEmail(email) != null;
+    return accountRepo.findByEmail(email).isPresent();
   }
 
   private boolean usernameExists(String username) {

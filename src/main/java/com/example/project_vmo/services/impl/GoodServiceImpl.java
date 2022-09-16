@@ -1,15 +1,16 @@
 package com.example.project_vmo.services.impl;
 import com.example.project_vmo.commons.config.MapperUtil;
+import com.example.project_vmo.models.entities.Account;
 import com.example.project_vmo.models.entities.Good;
 import com.example.project_vmo.models.entities.Image;
 import com.example.project_vmo.models.request.GoodDto;
 import com.example.project_vmo.models.response.GoodResponse;
+import com.example.project_vmo.repositories.AccountRepo;
 import com.example.project_vmo.repositories.GoodRepo;
 import com.example.project_vmo.repositories.ImageRepo;
 import com.example.project_vmo.services.GoodService;
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -32,6 +33,9 @@ public class GoodServiceImpl implements GoodService {
   private GoodRepo goodRepo;
   @Autowired
   private ImageRepo imageRepo;
+
+  @Autowired
+  private AccountRepo accountRepo;
 
   public static String uploadDir =
       System.getProperty("user.dir") + "/src/main/resources/static/images";
@@ -90,6 +94,8 @@ public class GoodServiceImpl implements GoodService {
     }
     imageRepo.saveAll(image);
     good.setImages(image);
+    Account account = accountRepo.findByAccountId(goodDto.getSupplierId());
+    good.setAccount(account);
     return MapperUtil.map(goodRepo.save(good), GoodDto.class);
   }
 

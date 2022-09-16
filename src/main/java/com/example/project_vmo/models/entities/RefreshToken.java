@@ -1,6 +1,7 @@
 package com.example.project_vmo.models.entities;
 
 import java.time.Instant;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class RefreshToken {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "account_id", referencedColumnName = "accountId")
   private Account account;
 

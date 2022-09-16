@@ -15,15 +15,13 @@
       <column name="password" type="VARCHAR(255)"/>
       <column name="full_name" type="VARCHAR(255)"/>
       <column name="address" type="VARCHAR(255)"/>
+      <column name="phone" type="VARCHAR(255)"/>
       <column name="age" type="INT">
         <constraints nullable="false"/>
       </column>
       <column name="create_at" type="DATETIME"/>
       <column name="updated_at" type="DATETIME"/>
       <column name="is_deleted" type="BOOLEAN"/>
-      <column name="enabled" type="BOOLEAN">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
   </changeSet>
   <changeSet id="1662635509501-2" author="admin">
@@ -66,11 +64,11 @@
   <changeSet id="1662635509501-5" author="admin">
     <createTable tableName="reset_password_token">
       <column name="id" type="INT" autoIncrement="true">
-        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_resetpasswordtoken"/>
+        <constraints primaryKey="true" primaryKeyName="pk_resetpasswordtoken"/>
       </column>
       <column name="token" type="VARCHAR(255)"/>
       <column name="user_id" type="INT">
-        <constraints nullable="false"/>
+        <constraints nullable="true"/>
       </column>
       <column name="expiry_date" type="DATETIME"/>
       <column name="confirmed_at" type="DATETIME"/>
@@ -79,16 +77,16 @@
   </changeSet>
   <changeSet id="1662635509501-6" author="admin">
     <createTable tableName="role">
-      <column name="role_id" type="INT">
+      <column name="role_id" type="INT" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role"/>
       </column>
       <column name="role_name" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
   <changeSet id="1662635509501-7" author="admin">
-    <createTable tableName="user_static">
-      <column name="static_id" type="INT" autoIncrement="true">
-        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_userstatic"/>
+    <createTable tableName="user_statist">
+      <column name="statist_id" type="INT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_userstatist"/>
       </column>
       <column name="count" type="INT">
         <constraints nullable="false"/>
@@ -127,7 +125,7 @@
       referencedTableName="account"/>
   </changeSet>
   <changeSet id="1662635509501-13" author="admin">
-    <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="user_static"
+    <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="user_statist"
       constraintName="FK_USERSTATIC_ON_ACCOUNT" referencedColumnNames="account_id"
       referencedTableName="account"/>
   </changeSet>
@@ -140,6 +138,16 @@
     <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users_roles"
       constraintName="fk_userol_on_role" referencedColumnNames="role_id"
       referencedTableName="role"/>
+  </changeSet>
+  <changeSet id="1663312309687-4" author="admin">
+    <dropTable cascadeConstraints="true" tableName="hibernate_sequence"/>
+  </changeSet>
+  <changeSet id="1663312309687-5" author="admin">
+    <dropColumn columnName="statist_id" tableName="user_statist"/>
+  </changeSet>
+  <changeSet id="1663312309687-2" author="admin">
+    <addPrimaryKey columnNames="static_id" constraintName="pk_userstatist"
+      tableName="user_statist"/>
   </changeSet>
 
 </databaseChangeLog>

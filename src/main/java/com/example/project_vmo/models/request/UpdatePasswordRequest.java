@@ -1,8 +1,7 @@
 package com.example.project_vmo.models.request;
 
-import com.example.project_vmo.commons.exception.PasswordValueMatch;
-import com.example.project_vmo.commons.exception.ValidPassword;
-import javax.persistence.Id;
+import com.example.project_vmo.commons.filters.PasswordValueMatch;
+import com.example.project_vmo.commons.filters.ValidPassword;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,7 @@
 package com.example.project_vmo.models.request;
 
 import com.sun.istack.NotNull;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,8 @@ public class GoodDto {
   @NotNull
   private int quantity;
   private List<ImageDto> images;
-//  private Date create_at;
+  private int supplierId;
+  private Date create_at;
 //  private Date updated_at;
 //  private Boolean is_deleted = Boolean.FALSE;
 //  private MultipartFile[] images;

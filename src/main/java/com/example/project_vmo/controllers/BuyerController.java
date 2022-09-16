@@ -1,21 +1,17 @@
 package com.example.project_vmo.controllers;
 
-import com.example.project_vmo.models.request.AccountDto;
-import com.example.project_vmo.models.request.LoginDto;
+
 import com.example.project_vmo.models.request.UpdateAccountDto;
 import com.example.project_vmo.models.request.UpdatePasswordRequest;
-import com.example.project_vmo.models.response.JWTAuthResponse;
-import com.example.project_vmo.security.jwt.JwtUtils;
+import com.example.project_vmo.security.jwt.CustomUserDetail;
 import com.example.project_vmo.services.AccountService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +24,11 @@ public class BuyerController {
   @Autowired
   private AccountService accountService;
 
-  @PutMapping("/{id}")
+  @PutMapping()
   public ResponseEntity<?> updateUser(@RequestBody UpdateAccountDto accountDto,
-      @PathVariable int id) {
+      @AuthenticationPrincipal User user) {
     return ResponseEntity.status(HttpStatus.ACCEPTED)
-        .body(accountService.updateAccount(accountDto, id));
+        .body(accountService.updateAccount(accountDto, user ));
   }
 
   @PutMapping("/updatePassword/{id}")

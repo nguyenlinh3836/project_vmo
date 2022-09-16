@@ -1,7 +1,6 @@
 package com.example.project_vmo.controllers;
 
 import com.example.project_vmo.models.request.AccountDto;
-import com.example.project_vmo.models.request.UpdateAccountDto;
 import com.example.project_vmo.models.response.AccountCreateResponse;
 import com.example.project_vmo.services.AccountService;
 import javax.validation.Valid;
@@ -27,15 +26,15 @@ public class AdminController {
 
   @PostMapping
   public ResponseEntity<?> createAccount(@Valid @RequestBody AccountDto accountDto) {
-   AccountCreateResponse response = new AccountCreateResponse();
-   response.setAccountDto(accountService.createAccount(accountDto));
-   response.setMessage("New account has been create !");
+    AccountCreateResponse response = new AccountCreateResponse();
+    response.setAccountDto(accountService.createAccount(accountDto));
+    response.setMessage("New account has been create !");
     return ResponseEntity.status(HttpStatus.ACCEPTED)
         .body(response);
   }
 
   @GetMapping
-  public ResponseEntity<?> getSupplier(@RequestParam String name,
+  public ResponseEntity<?> getAccountByRole(@RequestParam String name,
       @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
       @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
     return ResponseEntity.status(HttpStatus.ACCEPTED)
@@ -43,10 +42,10 @@ public class AdminController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateAccount(@RequestBody UpdateAccountDto updateAccountDto,
+  public ResponseEntity<?> updateAccount(@RequestBody AccountDto accountDto,
       @PathVariable("id") int id) {
     return ResponseEntity.status(HttpStatus.ACCEPTED)
-        .body(accountService.updateAccount(updateAccountDto, id));
+        .body(accountService.adminUpdateDto(accountDto, id));
   }
 
   @DeleteMapping("/{id}")
@@ -54,6 +53,4 @@ public class AdminController {
     accountService.deleteAccount(id);
     return ResponseEntity.status(HttpStatus.ACCEPTED).body("Buyer has been deleted");
   }
-
-
 }

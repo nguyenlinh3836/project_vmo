@@ -15,7 +15,7 @@ public interface PasswordTokenService {
 
   MessageResponse changePassword(PasswordResetRequest request);
 
-  void updatePassword(String email, String password);
+  Boolean updatePassword(String email, String password);
 
   void saveConfirmationToken(Account account, String token);
 

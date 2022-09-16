@@ -17,13 +17,10 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
 
   Account findByUsername(String name);
 
-  Account findByEmail(String email);
+  Optional<Account> findByEmail(String email);
 
   Account findByAccountId(int id);
 
-
   Page<Account> findByRoles_roleName(String roleName, Pageable pageable);
-
-
 
 }

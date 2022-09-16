@@ -33,7 +33,7 @@ public class PasswordResetToken {
   private String token;
 
   @ManyToOne(targetEntity = Account.class, fetch = FetchType.EAGER)
-  @JoinColumn(nullable = false, name = "user_id")
+  @JoinColumn(name = "user_id")
   private Account account;
 
   @Column
